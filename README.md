@@ -1,7 +1,11 @@
 # Sign_Language_Detection
-pip3 install tensorflow
-pip3 install tensorflow-gpu
-pip3 install opencv-python
-pip3 install mediapipe
-pip3 install matplotlib
+
+**Installing dependencies**
+```
+pip install tensorflow
+pip install tensorflow-gpu
+pip install opencv-python
+pip install mediapipe
+pip install matplotlib
 pip install scikit-learn
+```
