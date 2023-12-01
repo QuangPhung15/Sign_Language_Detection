@@ -68,7 +68,25 @@ def extract_keypoints(results):
     
     return np.concatenate([pose, face, left_hand, right_hand])
 
+def setupFolder(actions: list):
+    # Root path for extracted data
+    DATA_PATH = os.path.join("MP_DATA")
 
+    # Actions that we try to detect
+    actions = np.array(actions)
+
+    # Videos per data
+    no_sequences = 30
+
+    # Frames per video
+    sequence_len = 30
+
+    for action in actions:
+        for i in range(no_sequences):
+            try:
+                os.mkdir(os.path.join(DATA_PATH, action, str(i)))
+            except:
+                pass
 
 
 
