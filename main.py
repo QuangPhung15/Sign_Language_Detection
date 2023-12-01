@@ -26,6 +26,52 @@ def draw_landmarks(image, results):
     mp_drawing.draw_landmarks(image, results.left_hand_landmarks, mp_holistic.HAND_CONNECTIONS) # Draw left hand landmarks
     mp_drawing.draw_landmarks(image, results.right_hand_landmarks, mp_holistic.HAND_CONNECTIONS) # Draw right hand landmarks
 
+def draw_styled_landmarks(image, results):
+    # Draw face landmarks
+    mp_drawing.draw_landmarks(image, results.face_landmarks, mp_holistic.FACEMESH_CONTOURS, 
+                              mp_drawing.DrawingSpec(color=(80, 110, 10), thickness=1, circle_radius=1),
+                              mp_drawing.DrawingSpec(color=(80, 256, 121), thickness=1, circle_radius=1))
+    
+    # Draw pose landmarks
+    mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_holistic.POSE_CONNECTIONS, 
+                              mp_drawing.DrawingSpec(color=(80, 22, 10), thickness=2, circle_radius=4),
+                              mp_drawing.DrawingSpec(color=(80, 44, 121), thickness=2, circle_radius=2)) 
+    
+    # Draw left hand landmarks
+    mp_drawing.draw_landmarks(image, results.left_hand_landmarks, mp_holistic.HAND_CONNECTIONS, 
+                              mp_drawing.DrawingSpec(color=(121, 22, 76), thickness=2, circle_radius=4),
+                              mp_drawing.DrawingSpec(color=(121, 44, 250), thickness=2, circle_radius=2)) 
+    
+    # Draw right hand landmarks
+    mp_drawing.draw_landmarks(image, results.right_hand_landmarks, mp_holistic.HAND_CONNECTIONS, 
+                              mp_drawing.DrawingSpec(color=(245, 117, 66), thickness=2, circle_radius=4),
+                              mp_drawing.DrawingSpec(color=(245, 66, 230), thickness=2, circle_radius=2)) 
+
+def extract_keypoints(results):
+    face, pose, right_hand, left_hand = np.zeros(33 * 4).flatten(), np.zeros(468 * 3).flatten(), np.zeros(21 * 3).flatten(), np.zeros(21 * 3).flatten()
+
+    # Extract pose landmarks
+    if (results.pose_landmarks):
+        pose = np.array([[res.x, res.y, res.z, res.visibility] for res in results.pose_landmarks.landmark]).flatten()
+    
+    # Extract face landmarks
+    if (results.face_landmarks):
+        face = np.array([[res.x, res.y, res.z] for res in results.face_landmarks.landmark]).flatten()
+
+    # Extract left hand landmarks
+    if (results.left_hand_landmarks):
+        left_hand = np.array([[res.x, res.y, res.z] for res in results.left_hand_landmarks.landmark]).flatten()
+    
+    # Extract right hand landmarks
+    if (results.right_hand_landmarks):
+        left_hand = np.array([[res.x, res.y, res.z] for res in results.right_hand_landmarks.landmark]).flatten()
+    
+    return np.concatenate([pose, face, left_hand, right_hand])
+
+
+
+
+
 def main():
     cap = cv2.VideoCapture(0)
     # Set mediapipe holistic model
@@ -39,7 +85,8 @@ def main():
             image, results = mediapipe_detection(frame, holistic)
             # print(results)
 
-            draw_landmarks(image, results)
+            draw_styled_landmarks(image, results)
+            extract_keypoints(results)
 
             # Show on the screen
             cv2.imshow("Sign Language Detection", image)
