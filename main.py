@@ -10,7 +10,7 @@ import cv2
 sequence = []
 sentence = []
 predictions = []
-threshold = 0.7
+threshold = 0.5
 model = load_model("actions.h5")
 train_actions = ["a", "b"]
 new_actions = ["b"]

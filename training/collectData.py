@@ -49,16 +49,16 @@ def draw_styled_landmarks(image, results):
                               mp_drawing.DrawingSpec(color=(245, 117, 66), thickness=2, circle_radius=4),
                               mp_drawing.DrawingSpec(color=(245, 66, 230), thickness=2, circle_radius=2)) 
 
-def extract_keypoints(results, face=False, pose=False):
+def extract_keypoints(results, face_dectect=False, pose_detect=False):
     face, pose, right_hand, left_hand = np.zeros(468 * 3), np.zeros(33 * 4), np.zeros(21 * 3), np.zeros(21 * 3)
 
     # Extract pose landmarks
-    if (pose):
+    if (pose_detect):
         if (results.pose_landmarks):
             pose = np.array([[res.x, res.y, res.z, res.visibility] for res in results.pose_landmarks.landmark]).flatten()
     
     # Extract face landmarks
-    if (face):
+    if (face_dectect):
         if (results.face_landmarks):
             face = np.array([[res.x, res.y, res.z] for res in results.face_landmarks.landmark]).flatten()
 
